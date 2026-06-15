@@ -117,10 +117,38 @@ Seq2Seq, BLEU, 사전학습 번역 모델 수업 예제를 바탕으로 Hugging 
 - 법률 도메인에서 `EunB2/KL-RoBERTa` 기반 법률 문맥 유사도와 용어 매칭 분석
 - `.env` 기반 OpenAI API 키 관리와 `.env.example` 제공
 
+### 6. YOLO Object Detection + Face Recognition
+
+YOLO 예제 노트북을 참고해 YOLOv8 객체 탐지와 `face_recognition` 기반 얼굴 인식을 결합한 컴퓨터 비전 실습 프로젝트입니다. Gradio 대신 FastAPI + Next.js로 구성했습니다.
+
+- Local App: `http://localhost:3001`
+- Project Path: `data-analysis/computer-vision/2026-06-15-yolo-image-detector/`
+- Backend: `data-analysis/computer-vision/2026-06-15-yolo-image-detector/backend/`
+- Frontend: `data-analysis/computer-vision/2026-06-15-yolo-image-detector/nextjs-face-detector/`
+
+핵심 작업:
+
+- 수업 제공 YOLO 노트북 3개 참고 자료 보관
+- `ultralytics` YOLOv8n Detection / Segmentation 모델 기반 객체 탐지
+- 이미지 드래그 업로드 후 원본 · 탐지 결과 이미지 나란히 표시
+- Detection Box, Segmentation Mask, 라벨, confidence score 표시
+- 객체 그룹 필터 · 클래스 키워드 필터 · confidence threshold 슬라이더 제공
+- UI에서 얼굴 사진 드래그 + 이름 입력으로 얼굴 DB 등록 (같은 이름 여러 장 등록 시 인식률 향상)
+- `face_recognition` + `num_jitters=5` 고품질 인코딩으로 다른 각도/조명 사진도 인식
+- FastAPI backend + Next.js 다크 테마 UI
+
 ## Repository Structure
 
 ```text
 data-analysis/
+  computer-vision/
+    2026-06-15-yolo-image-detector/
+      notebooks/              # YOLO 수업 참고 노트북
+      app/                    # (구) Gradio 이미지 객체 탐지 앱
+      backend/                # FastAPI YOLO + face_recognition API
+      nextjs-face-detector/   # 객체 탐지 · 얼굴 등록/인식 Next.js 앱
+      samples/known_faces/    # 등록용 얼굴 샘플 이미지
+
   machine-learning/
     2026-06-04-ml-practice/
       notebooks/              # Jupyter 머신러닝 실습 노트북
@@ -186,6 +214,22 @@ portfolio-candidates/         # 포트폴리오 후보
 - 자연어 처리 개념을 실제 검색/추천 UI로 구현하는 능력
 - Jupyter 실습을 Next.js 프로토타입으로 전환하는 능력
 - GitHub, Vercel, API, RSS 같은 실무 도구를 연결하는 능력
+
+## Next Project Ideas
+
+### AI 고시문 모니터링 RAG 지도 서비스
+
+경기도청 고시·공고 같은 관공서의 최신 고시문을 수집해 도시개발구역 지정, 개발계획 변경, 지구단위계획 등 신규 지정 현황을 빠르게 확인하는 프로젝트입니다.
+
+초기 MVP:
+
+- 경기도청 고시·공고 페이지에서 최신 문서 목록 수집
+- `도시개발구역`, `개발계획`, `지구단위계획`, `산업단지`, `정비구역` 키워드 필터링
+- PDF/HWP 첨부파일 다운로드 및 텍스트 추출
+- RAG 기반 문서 검색과 핵심 내용 요약
+- 주소/지번 추출 후 카카오 로컬 API 또는 네이버 Geocoding API로 좌표 변환
+- Next.js 지도 화면에서 신규 고시 위치와 요약 정보 표시
+- 추후 특정 키워드 고시가 올라오면 알림을 보내는 크롤링 봇으로 확장
 
 ## Run Examples
 
@@ -254,4 +298,22 @@ OpenAI 비교 평가와 도메인 실험실을 사용하려면 `backend/.env`에
 ```bash
 OPENAI_API_KEY=your_openai_api_key_here
 OPENAI_MODEL=gpt-5.2
+```
+
+YOLO 객체 탐지 · 얼굴 인식:
+
+```bash
+cd data-analysis/computer-vision/2026-06-15-yolo-image-detector/backend
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --host 127.0.0.1 --port 8000
+```
+
+다른 터미널에서:
+
+```bash
+cd data-analysis/computer-vision/2026-06-15-yolo-image-detector/nextjs-face-detector
+npm install
+npm run dev -- --port 3001
 ```
