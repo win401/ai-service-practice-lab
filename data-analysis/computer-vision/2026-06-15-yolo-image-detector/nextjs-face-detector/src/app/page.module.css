@@ -1,0 +1,362 @@
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+  min-height: 100vh;
+}
+
+/* ── 헤더 ── */
+.header {
+  grid-column: 1 / -1;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.header h1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.header p {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ── 사이드바 ── */
+.sidebar {
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rangeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rangeRow input[type='range'] {
+  flex: 1;
+  padding: 0;
+  background: none;
+  border: none;
+  accent-color: var(--accent);
+}
+
+.rangeRow span {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  min-width: 32px;
+  text-align: right;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.toggle input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.btnPrimary {
+  background: var(--accent);
+  color: #fff;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.btnPrimary:hover { background: var(--accent-hover); }
+.btnPrimary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btnDanger {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.btnDanger:hover { background: var(--danger); color: #fff; }
+
+/* ── 메인 콘텐츠 ── */
+.main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 탭 ── */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 12px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  background: none;
+  border-radius: 0;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover { color: var(--text); }
+.tabActive { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
+
+/* ── 탐지 탭 ── */
+.detectTab {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+
+.dropzone {
+  margin: 20px;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 40px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  color: var(--muted);
+}
+
+.dropzone:hover, .dropzoneActive {
+  border-color: var(--accent);
+  background: rgba(79, 142, 247, 0.05);
+  color: var(--text);
+}
+
+.dropzoneHint {
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+.previewRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 0 20px 16px;
+}
+
+.imageCard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.imageCard span {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.imageCard img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  object-fit: contain;
+  background: var(--surface);
+}
+
+.summary {
+  margin: 0 20px 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.table {
+  margin: 0 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.table th {
+  background: var(--surface);
+  padding: 8px 12px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.table tr:last-child td { border-bottom: none; }
+.table tr:hover td { background: var(--surface); }
+
+/* ── 등록 탭 ── */
+.registerTab {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
+}
+
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.registerForm h2 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.registerForm p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.faceDropzone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+  color: var(--muted);
+  position: relative;
+}
+
+.faceDropzone:hover, .faceDropzoneActive {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.faceDropzone img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.faceDropzone input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.btnRegister {
+  background: var(--success);
+  color: #fff;
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+}
+
+.btnRegister:hover { filter: brightness(1.1); }
+.btnRegister:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.faceList h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.faceItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.faceName {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.statusMsg {
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.statusOk { background: rgba(61, 191, 122, 0.15); color: var(--success); }
+.statusErr { background: rgba(224, 82, 82, 0.15); color: var(--danger); }
+
+.empty {
+  color: var(--muted);
+  font-size: 13px;
+  padding: 16px;
+  text-align: center;
+}

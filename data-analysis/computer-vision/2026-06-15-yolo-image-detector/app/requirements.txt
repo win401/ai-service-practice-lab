@@ -1,0 +1,8 @@
+gradio
+huggingface-hub<1.0
+pydantic<2.11
+ultralytics
+opencv-python
+pillow
+numpy
+face-recognition
