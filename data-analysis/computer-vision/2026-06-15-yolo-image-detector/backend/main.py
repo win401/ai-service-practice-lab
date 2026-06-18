@@ -19,6 +19,21 @@ try:
 except ImportError:
     FACE_RECOGNITION_AVAILABLE = False
 
+try:
+    from deepface import DeepFace
+    DEEPFACE_AVAILABLE = True
+except Exception:
+    DEEPFACE_AVAILABLE = False
+
+EMOTION_EMOJI = {
+    "happy": "😊", "sad": "😢", "angry": "😠",
+    "fear": "😨", "surprise": "😲", "disgust": "🤢", "neutral": "😐",
+}
+EMOTION_KO = {
+    "happy": "행복", "sad": "슬픔", "angry": "화남",
+    "fear": "두려움", "surprise": "놀람", "disgust": "혐오", "neutral": "무표정",
+}
+
 app = FastAPI(title="YOLO Face Detector API")
 
 app.add_middleware(
@@ -123,6 +138,23 @@ def _draw_mask(img: np.ndarray, mask: np.ndarray, group: str, alpha: float = 0.4
     img[:] = f.astype(np.uint8)
 
 
+def _analyze_emotion(img_rgb: np.ndarray, top: int, right: int, bottom: int, left: int) -> str | None:
+    """얼굴 영역을 잘라 표정을 분석합니다."""
+    if not DEEPFACE_AVAILABLE:
+        return None
+    try:
+        face_crop = img_rgb[top:bottom, left:right]
+        if face_crop.size == 0:
+            return None
+        result = DeepFace.analyze(face_crop, actions=["emotion"], enforce_detection=False, silent=True)
+        emotion = result[0]["dominant_emotion"]
+        emoji = EMOTION_EMOJI.get(emotion, "")
+        ko = EMOTION_KO.get(emotion, emotion)
+        return f"{emoji} {ko}"
+    except Exception:
+        return None
+
+
 def _match_face(enc: np.ndarray, tolerance: float) -> str:
     if not known_encodings:
         return "Unknown"
@@ -144,6 +176,7 @@ def health():
     return {
         "ok": True,
         "face_recognition": FACE_RECOGNITION_AVAILABLE,
+        "deepface": DEEPFACE_AVAILABLE,
         "registered_faces": known_names,
     }
 
@@ -257,16 +290,20 @@ async def detect(
             encs = face_recognition.face_encodings(annotated, locs)
             for (top, right, bottom, left), enc in zip(locs, encs):
                 name = _match_face(enc, tolerance)
-                face_results.append({"name": name})
-                _draw_box(annotated, [left, top, right, bottom], name, 1.0,
+                emotion = _analyze_emotion(annotated, top, right, bottom, left)
+                label = f"{name}  {emotion}" if emotion else name
+                face_results.append({"name": name, "emotion": emotion or ""})
+                _draw_box(annotated, [left, top, right, bottom], label, 1.0,
                           "사람" if name != "Unknown" else "기타")
         else:
             gray = cv2.cvtColor(annotated, cv2.COLOR_RGB2GRAY)
             faces = FACE_CASCADE.detectMultiScale(gray, 1.1, 5, minSize=(35, 35))
             for i, (x, y, w, h) in enumerate(faces, 1):
-                label = f"face {i}"
-                face_results.append({"name": label})
-                _draw_box(annotated, [int(x), int(y), int(x + w), int(y + h)], label, 1.0, "기타")
+                top, right, bottom, left = int(y), int(x + w), int(y + h), int(x)
+                emotion = _analyze_emotion(annotated, top, right, bottom, left)
+                label = f"face {i}  {emotion}" if emotion else f"face {i}"
+                face_results.append({"name": f"face {i}", "emotion": emotion or ""})
+                _draw_box(annotated, [left, top, right, bottom], label, 1.0, "기타")
 
     # 요약
     if not rows:

@@ -1,0 +1,46 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Next.js 자동 삽입 요소 제거 */
+body > nextjs-portal,
+body > [data-nextjs-dialog-overlay],
+body > [data-nextjs-toast],
+#__next-build-watcher,
+[data-next-badge] { display: none !important; }
+
+:root {
+  --bg:           #0f1117;
+  --surface:      #1a1d27;
+  --border:       #2a2d3a;
+  --text:         #e8eaf0;
+  --muted:        #8b8fa8;
+  --accent:       #4f8ef7;
+  --accent-hover: #6ba3ff;
+  --radius:       12px;
+  --blue:         #4f8ef7;
+  --orange:       #f59e0b;
+  --purple:       #a855f7;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s;
+}

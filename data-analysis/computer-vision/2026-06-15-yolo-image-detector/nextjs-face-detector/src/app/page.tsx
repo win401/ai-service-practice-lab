@@ -8,7 +8,8 @@ const API = 'http://127.0.0.1:8000';
 const CLASS_GROUPS = ['전체', '사람', '동물', '차량', '교통 신호', '스포츠', '소지품', '전자기기', '음식'];
 
 type DetectRow = { id: number; class: string; confidence: number; group: string; box: string };
-type DetectResult = { original: string; annotated: string; rows: DetectRow[]; summary: string };
+type FaceResult = { name: string; emotion: string };
+type DetectResult = { original: string; annotated: string; rows: DetectRow[]; summary: string; face_results: FaceResult[] };
 type FaceCounts = { [name: string]: number };
 
 export default function Home() {
@@ -283,6 +284,29 @@ export default function Home() {
                             <td>{row.confidence}</td>
                             <td>{row.group}</td>
                             <td style={{ fontFamily: 'monospace', fontSize: 12 }}>{row.box}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {result.face_results?.length > 0 && (
+                  <div className={styles.table}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>인식 이름</th>
+                          <th>표정</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {result.face_results.map((f, i) => (
+                          <tr key={i}>
+                            <td>{i + 1}</td>
+                            <td>{f.name}</td>
+                            <td>{f.emotion || '—'}</td>
                           </tr>
                         ))}
                       </tbody>

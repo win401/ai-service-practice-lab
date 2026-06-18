@@ -11,6 +11,8 @@ __pycache__/
 .venv/
 venv/
 env/
+.matplotlib/
+.yolo/
 
 # Node / Next.js
 node_modules/
@@ -37,6 +39,7 @@ data-analysis/**/data/processed/*.joblib
 *.tar
 *.tar.gz
 *.7z
+*.pt
 
 # Keep lightweight reports, notebooks, and charts tracked.
 !data-analysis/**/data/raw/.gitkeep

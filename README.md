@@ -137,6 +137,44 @@ YOLO 예제 노트북을 참고해 YOLOv8 객체 탐지와 `face_recognition` �
 - `face_recognition` + `num_jitters=5` 고품질 인코딩으로 다른 각도/조명 사진도 인식
 - FastAPI backend + Next.js 다크 테마 UI
 
+### 7. YOLO Pose Estimation + 자세 분류
+
+YOLOv8 Pose 모델로 사람의 관절 키포인트를 감지하고, 골격 기하학 기반 알고리즘으로 서있는·앉은·누운·만세 자세를 자동 분류하는 컴퓨터 비전 실습 프로젝트입니다. 객체 탐지와 세그멘테이션 모드도 함께 지원합니다.
+
+- Local App: `http://localhost:3002`
+- Project Path: `data-analysis/computer-vision/2026-06-16-yolo-pose/`
+- Backend: `data-analysis/computer-vision/2026-06-16-yolo-pose/backend/`
+- Frontend: `data-analysis/computer-vision/2026-06-16-yolo-pose/nextjs-pose-detector/`
+
+핵심 작업:
+
+- YOLOv8n-pose COCO 17 키포인트 감지
+- 무릎 각도, 몸통 기울기, 골반-발목 비율 기반 자세 분류 알고리즘
+- 의자 탐지 결과와 골반 위치 교차 검증으로 걸터앉은 자세 보정
+- 좌우 색상 구분 스켈레톤 오버레이 (노랑/초록/파랑/빨강)
+- 각 사람 박스 상단에 번호+자세+신뢰도 라벨 표시
+- 객체 탐지(yolov8n) · 세그멘테이션(yolov8n-seg) ON/OFF 토글
+- 2컬럼 레이아웃: 결과 이미지 + 자세·탐지 상세 테이블
+
+### 8. CrewAI 멀티에이전트 고객센터
+
+CrewAI 라우팅 패턴으로 고객 문의를 배송·환불·제품 카테고리로 자동 분류하고, 분야별 전문 에이전트가 실제 주문 DB를 Tool로 조회해 답변하는 멀티에이전트 시스템입니다.
+
+- Local App: `http://localhost:3003`
+- Project Path: `data-analysis/natural-language-processing/2026-06-18-crewai-customer-support/`
+- Backend: `data-analysis/natural-language-processing/2026-06-18-crewai-customer-support/backend/`
+- Frontend: `data-analysis/natural-language-processing/2026-06-18-crewai-customer-support/nextjs-support/`
+
+핵심 작업:
+
+- CrewAI 라우팅 패턴: 분류 Crew → Python if/elif → 전문가 Crew 2단계 실행
+- 4개 에이전트: 분류 전문가 + 배송/환불/제품 전문 상담사
+- CrewAI Tool 연동: `lookup_order`, `lookup_customer_orders`, `lookup_delivery`, `check_refund_eligibility`, `lookup_product`
+- 관계형 더미 DB: 고객(5명) · 주문 · 상품 · 배송(4단계 상태) 5건
+- 이름만 말해도 에이전트가 스스로 고객 조회 후 맥락 있는 답변 생성
+- 채팅 UI + 분석 패널 2분할: 분류 결과 태그, 배정 에이전트, 처리 단계, 소요시간 표시
+- FastAPI backend + Next.js 다크 테마 채팅 UI
+
 ## Repository Structure
 
 ```text
@@ -316,4 +354,41 @@ uvicorn main:app --host 127.0.0.1 --port 8000
 cd data-analysis/computer-vision/2026-06-15-yolo-image-detector/nextjs-face-detector
 npm install
 npm run dev -- --port 3001
+```
+
+YOLO Pose 자세 분류:
+
+```bash
+cd data-analysis/computer-vision/2026-06-16-yolo-pose/backend
+python3 -m venv .venv
+. .venv/bin/activate
+pip install ultralytics fastapi uvicorn pillow python-multipart
+uvicorn main:app --host 0.0.0.0 --port 8001
+```
+
+다른 터미널에서:
+
+```bash
+cd data-analysis/computer-vision/2026-06-16-yolo-pose/nextjs-pose-detector
+npm install
+npm run dev
+```
+
+CrewAI 멀티에이전트 고객센터:
+
+```bash
+cd data-analysis/natural-language-processing/2026-06-18-crewai-customer-support/backend
+python3 -m venv .venv
+. .venv/bin/activate
+pip install crewai langchain-openai fastapi uvicorn python-dotenv
+# .env 파일에 OPENAI_API_KEY 입력
+uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+다른 터미널에서:
+
+```bash
+cd data-analysis/natural-language-processing/2026-06-18-crewai-customer-support/nextjs-support
+npm install
+npm run dev
 ```
